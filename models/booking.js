@@ -12,6 +12,6 @@ const schema=mongoose.Schema({
     status:String
 });
 
-const user=mongoose.model('Booking', schema);
+const booking=mongoose.model('Booking', schema);
 
-module.exports=user;
+module.exports=booking;

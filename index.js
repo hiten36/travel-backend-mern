@@ -5,6 +5,7 @@ const port = process.env.PORT || 5000;
 const userRouter=require('./routes/userRouter');
 const busRouter=require('./routes/busRouter');
 const bookingRouter=require('./routes/bookingRouter');
+const refundRouter=require('./routes/refundRouter');
 const cors=require('cors');
 
 const app=express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/user', userRouter);
 app.use('/bus', busRouter);
 app.use('/booking', bookingRouter);
+app.use('/refund', refundRouter);
 
 app.get('/', (req,res)=>{
     res.send('Hello Travellers!');

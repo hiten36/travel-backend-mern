@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 router.get('/getRefunds',auth,async (req,res)=>{
     try {
-        const data = await getRefunds({...req.query});
+        const data = await getRefunds({...req.query, authAdmin: req.user});
         res.json(data);
     } catch (error) {
         res.status(400).json({success:false, message:error.message});
@@ -20,7 +20,7 @@ router.put('/updateRefund/:id', auth, async (req,res)=>{
     }
 });
 
-router.put('/deleteRefund/:id', auth, async (req,res)=>{
+router.delete('/deleteRefund/:id', auth, async (req,res)=>{
     try {
         const data = await deleteRefund(req.user, req.params.id);
         res.json(data);

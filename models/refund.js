@@ -12,6 +12,6 @@ const schema=mongoose.Schema({
     ts:String
 });
 
-const user=mongoose.model('Booking', schema);
+const refund=mongoose.model('Refund', schema);
 
-module.exports=user;
+module.exports=refund;

@@ -29,7 +29,7 @@ router.put('/updateBus/:id', auth, async (req,res)=>{
     }
 });
 
-router.put('/deleteBus/:id', auth, async (req,res)=>{
+router.delete('/deleteBus/:id', auth, async (req,res)=>{
     try {
         const data = await deleteBus(req.user, req.params.id);
         res.json(data);

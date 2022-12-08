@@ -5,20 +5,33 @@ const getRefunds=async ({date, status, bookingId, authAdmin})=>{
     {
         return {success:false, message:"Not Authorised"};
     }
+
     let and = [];
     if(date)
     {
         and.push({ts:{$gte:date-19800000, $lt:date + 66600000}});
     }
+
     if(status)
     {
         and.push({status});
     }
+
     if(bookingId)
     {
         and.push({bookingId});
     }
-    const data= await Refund.find({$and:and});
+
+    let data;
+    if(and.length===0)
+    {
+        data= await Refund.find();
+    }
+    else
+    {
+        data= await Refund.find({$and:and});
+    }
+    
     return {success:true, data};
 };
 
@@ -27,11 +40,12 @@ const updateRefund=async ({id, status, authAdmin})=>{
     {
         return {success:false, message:"Not Authorised"};
     }
+    // approved/rejected
     const data = await Refund.findByIdAndUpdate(id, {$set:{status}}, {new:true});
     return {success:true, data, message:"Status updated successfully"};
 };
 
-const deleteRefund=async ({id, authAdmin})=>{
+const deleteRefund=async ({authAdmin, id})=>{
     if(!authAdmin)
     {
         return {success:false, message:"Not Authorised"};

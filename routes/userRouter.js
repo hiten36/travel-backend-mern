@@ -1,5 +1,5 @@
 const { signin, login, getUsers } = require('../controllers/userController');
-
+const auth=require('../middleware/auth');
 const router=require('express').Router();
 
 router.post('/signin',async (req,res)=>{
