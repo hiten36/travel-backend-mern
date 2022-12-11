@@ -13,29 +13,29 @@ const getBookings=async({busName, busFrom, busTo, initialDate, endDate, id, auth
 
     let and=[];
 
-    if(id)
+    if(id && id!=='' && id!=='undefined')
     {
         data = await Booking.findById(id);
         return {success:true, data};
     }
-    if(busName)
+    if(busName && busName!=='' && busName!=='undefined')
     {
         and.push({busName});
     }
-    if(busFrom)
+    if(busFrom && busFrom!=='' && busFrom!=='undefined')
     {
         and.push({busFrom});
     }
-    if(busTo)
+    if(busTo && busTo!=='' && busTo!=='undefined')
     {
         and.push({busTo});
     }
-    if(initialDate)
+    if(initialDate && initialDate!=='' && initialDate!=='undefined')
     {
         let t1=initialDate-19800000;
         and.push({bookTs:{$gte:t1}});
     }
-    if(endDate)
+    if(endDate && endDate!=='' && endDate!=='undefined')
     {
         let t1=endDate+66600000;
         and.push({bookTs:{$lt:t1}});

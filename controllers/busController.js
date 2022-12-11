@@ -2,8 +2,8 @@ const Bus = require('../models/bus');
 const { removeUndefined } = require('../util/util');
 
 const getBuses = async ({ start, end, date }) => {
-    if (start) {
-        if (date) {
+    if (start && start!==undefined && start!=='' & start!=='undefined') {
+        if (date && date!==undefined && date!=='' & date!=='undefined') {
             let date1 = date + 66600000;
             // let data = await Bus.find({ busStations: { $elemMatch: { start, end, startTs: { $gte: { date }, $lt: { date1 } } } } });
             let data = await Bus.find({ busStations: { $elemMatch: { start, end } }, startTs: { $gte: { date }, $lt: { date1 } } });

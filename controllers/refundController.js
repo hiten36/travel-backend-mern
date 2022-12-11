@@ -7,17 +7,17 @@ const getRefunds=async ({date, status, bookingId, authAdmin})=>{
     }
 
     let and = [];
-    if(date)
+    if(date && date!=='' && date!=='undefined')
     {
         and.push({ts:{$gte:date-19800000, $lt:date + 66600000}});
     }
 
-    if(status)
+    if(status && status!=='' && status!=='undefined')
     {
         and.push({status});
     }
 
-    if(bookingId)
+    if(bookingId && bookingId!=='' && bookingId!=='undefined')
     {
         and.push({bookingId});
     }
