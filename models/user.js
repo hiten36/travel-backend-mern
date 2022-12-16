@@ -10,6 +10,7 @@ const schema=mongoose.Schema({
     phone:String,
     age:String,
     password:String,
+    role:String,
     userTs:String
 });
 

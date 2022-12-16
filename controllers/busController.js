@@ -1,7 +1,13 @@
 const Bus = require('../models/bus');
 const { removeUndefined } = require('../util/util');
 
-const getBuses = async ({ start, end, date }) => {
+const getBuses = async ({ start, end, date, id }) => {
+    if(id && id!==undefined && id!=='' & id!=='undefined')
+    {
+        let data=await Bus.findById(id);
+        return data;
+    }
+
     if (start && start!==undefined && start!=='' & start!=='undefined') {
         if (date && date!==undefined && date!=='' & date!=='undefined') {
             let date1 = date + 66600000;
@@ -17,9 +23,11 @@ const getBuses = async ({ start, end, date }) => {
 };
 
 const createBus = async ({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, authAdmin }) => {
+    console.log(authAdmin);
     if (!authAdmin) {
         return { success: false, message: "Not Authorised" };
     }
+
     const addBus = new Bus({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats });
     const saveBus = await addBus.save();
     return { success: true, message: "Bus has been created successfully", data: saveBus };

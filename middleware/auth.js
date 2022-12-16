@@ -4,7 +4,8 @@ const User=require('../models/user');
 const auth = async (req,res,next)=>{
     try {
         req.user=null;
-        const token=req.header('token');
+        const token=req.headers['jwt'];
+        console.log(token);
         if(token)
         {
             const verifyUser=jwt.verify(token, process.env.SK);

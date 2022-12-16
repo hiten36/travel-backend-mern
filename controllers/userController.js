@@ -6,15 +6,37 @@ const { removeUndefined } = require('../util/util');
 const signin=async ({ firstName, lastName, email, gender, phone, age, password, confirmPassword })=>{
     let emailCheck=await User.findOne({email});
     let phoneCheck=await User.findOne({phone});
+  
     if(emailCheck || phoneCheck)
     {
         return {success:false, message:"User already available"};
     }
+
     if(password!==confirmPassword)
     {
         return {success:false, message:"Password and Confirm Password does not match"};
     }
-    const createUser=new User({firstName, lastName, email, gender, phone, age, password});
+
+    const createUser=new User({firstName, lastName, email, gender, phone, age, password, role: 'USER'});
+    const saveUser=await createUser.save();
+    return {success:true, message:"User created successfully", data:saveUser};
+};
+
+const createAdmin=async ({ firstName, lastName, email, gender, phone, age, password, confirmPassword })=>{
+    let emailCheck=await User.findOne({email});
+    let phoneCheck=await User.findOne({phone});
+  
+    if(emailCheck || phoneCheck)
+    {
+        return {success:false, message:"User already available"};
+    }
+
+    if(password!==confirmPassword)
+    {
+        return {success:false, message:"Password and Confirm Password does not match"};
+    }
+
+    const createUser=new User({firstName, lastName, email, gender, phone, age, password, role: 'ADMIN'});
     const saveUser=await createUser.save();
     return {success:true, message:"User created successfully", data:saveUser};
 };
@@ -39,12 +61,13 @@ const getUsers=async ()=>{
     return {success:true, data};
 };
 
-const updateUser=async ({firstName, lastName, email, gender, phone, age})=>{
+const updateUser=async ({firstName, lastName, email, gender, phone, age, role})=>{
     if(!authAdmin)
     {
         return {success: false, message: "Not Authorised"}
     }
-    let updateObj=removeUndefined({firstName, lastName, email, gender, phone, age});
+
+    let updateObj=removeUndefined({firstName, lastName, email, gender, phone, age, role});
     let updateProfile=await User.findByIdAndUpdate(authAdmin._id, {$set:updateObj}, {new:true});
     return {success:true, updateProfile};
 };
@@ -58,10 +81,35 @@ const deleteUser=async (id, authAdmin)=>{
     return {success:true, message: "User Deleted"};
 };
 
+const verifyUser=(auth)=>{
+    if(!auth)
+    {
+        return {success: false};
+    }
+    return {success: true};
+};
+
+const verifyAdmin=(auth)=>{
+    if(!auth)
+    {
+        return {success: false};
+    }
+
+    if(auth.role!=='ADMIN')
+    {
+        return {success: false};
+    }
+
+    return {success: true};
+};
+
 module.exports={
     signin,
     login,
     getUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    createAdmin,
+    verifyUser,
+    verifyAdmin
 };

@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 
 const schema=mongoose.Schema({
     busName:String, //Name of the bus
-    busPrice:String, //Price of the bus
+    busPrice:String, //Price of the bus - not needed
     busStart:String, //Bus starts from
     busEnd:String, //Bus last stop
     busStations:[{

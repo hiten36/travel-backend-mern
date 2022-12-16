@@ -5,7 +5,6 @@ const auth = require('../middleware/auth');
 router.get('/getBuses',async (req,res)=>{
     try {
         const data = await getBuses({...req.query});
-        console.log(data);
         res.json(data);
     } catch (error) {
         res.status(400).json({success:false, message:error.message});
@@ -14,6 +13,7 @@ router.get('/getBuses',async (req,res)=>{
 
 router.post('/createBus', auth, async (req,res)=>{
     try {
+        console.log(req.user);
         const data = await createBus({...req.body, authAdmin: req.user});
         res.json(data);
     } catch (error) {
