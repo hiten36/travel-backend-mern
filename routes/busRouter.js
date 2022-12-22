@@ -1,6 +1,6 @@
 const router=require('express').Router();
 const { getBuses, createBus, updateBus, deleteBus }=require('../controllers/busController');
-const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/admin/adminAuth');
 
 router.get('/getBuses',async (req,res)=>{
     try {
@@ -11,9 +11,8 @@ router.get('/getBuses',async (req,res)=>{
     }
 });
 
-router.post('/createBus', auth, async (req,res)=>{
+router.post('/createBus', adminAuth, async (req,res)=>{
     try {
-        console.log(req.user);
         const data = await createBus({...req.body, authAdmin: req.user});
         res.json(data);
     } catch (error) {
@@ -21,7 +20,7 @@ router.post('/createBus', auth, async (req,res)=>{
     }
 });
 
-router.put('/updateBus/:id', auth, async (req,res)=>{
+router.put('/updateBus/:id', adminAuth, async (req,res)=>{
     try {
         const data = await updateBus({...req.body, authAdmin: req.user, id: req.params.id});
         res.json(data);
@@ -30,7 +29,7 @@ router.put('/updateBus/:id', auth, async (req,res)=>{
     }
 });
 
-router.delete('/deleteBus/:id', auth, async (req,res)=>{
+router.delete('/deleteBus/:id', adminAuth, async (req,res)=>{
     try {
         const data = await deleteBus(req.user, req.params.id);
         res.json(data);

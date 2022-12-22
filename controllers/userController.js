@@ -1,7 +1,8 @@
 const User=require('../models/user');
 const bcrypt=require('bcryptjs');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/user/userAuth');
 const { removeUndefined } = require('../util/util');
+const booking = require('../models/booking');
 
 const signin=async ({ firstName, lastName, email, gender, phone, age, password, confirmPassword })=>{
     let emailCheck=await User.findOne({email});
@@ -53,7 +54,7 @@ const login=async ({ email, password })=>{
         return {success:false, message:"Invalid Credentials"};
     }
     const token=emailCheck.generateAuthToken();
-    return {success:true, message:"Login success", token};
+    return {success:true, message:"Login success", token, user: emailCheck};
 };
 
 const getUsers=async ()=>{
@@ -61,7 +62,7 @@ const getUsers=async ()=>{
     return {success:true, data};
 };
 
-const updateUser=async ({firstName, lastName, email, gender, phone, age, role})=>{
+const updateUser=async ({firstName, lastName, email, gender, phone, age, role, authAdmin})=>{
     if(!authAdmin)
     {
         return {success: false, message: "Not Authorised"}
@@ -94,13 +95,22 @@ const verifyAdmin=(auth)=>{
     {
         return {success: false};
     }
+    return {success: true};
+};
 
-    if(auth.role!=='ADMIN')
+const getUserBooking=async({userId, authAdmin})=>{
+    if(!authAdmin)
     {
         return {success: false};
     }
-
-    return {success: true};
+    let data;
+    if(userId)
+    {
+        data=await booking.find({userId});
+        return {success: true, data};
+    }
+    data=await booking.find({userId: authAdmin._id});
+    return {success: true, data};
 };
 
 module.exports={

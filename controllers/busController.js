@@ -22,23 +22,22 @@ const getBuses = async ({ start, end, date, id }) => {
     return { data };
 };
 
-const createBus = async ({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, authAdmin }) => {
-    console.log(authAdmin);
+const createBus = async ({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, farePerKm, busStartTs, totalTravel, initialMidData, authAdmin }) => {
     if (!authAdmin) {
         return { success: false, message: "Not Authorised" };
     }
 
-    const addBus = new Bus({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats });
+    const addBus = new Bus({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, farePerKm, busStartTs, totalTravel, initialMidData });
     const saveBus = await addBus.save();
     return { success: true, message: "Bus has been created successfully", data: saveBus };
 };
 
-const updateBus = async ({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, authAdmin, id }) => {
+const updateBus = async ({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, farePerKm, busStartTs, totalTravel, initialMidData, authAdmin, id }) => {
     if (!authAdmin) {
         return { success: false, message: "Not Authorised" };
     }
 
-    const newObj = removeUndefined({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats });
+    const newObj = removeUndefined({ busName, busPrice, busStart, busEnd, busStations, busSeats, busWindowSeats, busSpeed, bookedSeats, farePerKm, busStartTs, totalTravel, initialMidData });
 
     const data = await Bus.findByIdAndUpdate(id, { $set: newObj }, { new: true });
 

@@ -1,8 +1,9 @@
 const { getBookings, createBooking, updateBooking, deleteBooking, getUserBooking } = require('../controllers/bookingController');
-const auth=require('../middleware/auth');
+const userAuth = require('../middleware/user/userAuth');
+const adminAuth=require('../middleware/admin/adminAuth');
 const router=require('express').Router();
 
-router.get('/getBookings', auth, async(req,res)=>{
+router.get('/getBookings', adminAuth, async(req,res)=>{
     try {
         const data = await getBookings({...req.query, authAdmin:req.user});
         res.json(data);
@@ -20,7 +21,7 @@ router.get('/getUserBooking', async(req,res)=>{
     }
 });
 
-router.post('/createBooking', auth, async(req,res)=>{
+router.post('/createBooking', userAuth, async(req,res)=>{
     try {
         const data = await createBooking({...req.body, authAdmin: req.user});
         res.json(data);
@@ -31,7 +32,7 @@ router.post('/createBooking', auth, async(req,res)=>{
 });
 
 // Can change name,etc only.
-router.put('/updateBooking/:id', auth, async(req,res)=>{
+router.put('/updateBooking/:id', userAuth, async(req,res)=>{
     try {
         const data = await updateBooking({...req.body, authAdmin: req.user, id: req.params.id});
         res.json(data);
@@ -40,7 +41,7 @@ router.put('/updateBooking/:id', auth, async(req,res)=>{
     }
 });
 
-router.delete('/deleteBooking/:id', auth, async(req,res)=>{
+router.delete('/deleteBooking/:id', userAuth, async(req,res)=>{
     try {
         const data = await deleteBooking(req.params.id, req.body.refundAmount, req.user);
         res.json(data);
